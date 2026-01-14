@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 
 app = FastAPI(
-    title="Vercel + FastAPI",
+    title="Vercel + FastAPI+CMB",
     description="Vercel + FastAPI",
     version="1.0.0",
 )
