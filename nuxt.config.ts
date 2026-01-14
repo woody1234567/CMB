@@ -4,4 +4,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxt/eslint", "@nuxt/icon", "@nuxt/ui"],
   css: ["~/assets/css/main.css"],
+  runtimeConfig: {
+    public: {
+      apiBase:
+        process.env.NODE_ENV === "development"
+          ? "http://127.0.0.1:8000"
+          : "https://cmb-three.vercel.app/",
+    },
+  },
 });

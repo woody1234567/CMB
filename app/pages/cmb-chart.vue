@@ -97,17 +97,8 @@ const cmbOptions = {
 // Fetch Multipole Data
 async function fetchMultipoleData() {
   try {
-    // In dev, we need full path if not proxying. Nuxt auto-proxying?
-    // Assuming backend on same domain in prod, but port 8000 in dev.
-    // For now, let's try direct API path assuming local proxy setup or simple CORS
-    // If CORS fails, we might need a prefix.
-    // Let's use specific dev logic or a proxy rule in nuxt.config if needed.
-    // For simple verification, we assume user can hit endpoints.
-
-    // NOTE: Need to handle URL correctly. In production (Vercel), it's same origin.
-    // In dev (uvicorn 8000, nuxt 3000), we probably need full URL.
-    const baseUrl =
-      process.env.NODE_ENV === "development" ? "http://127.0.0.1:8000" : "";
+    const config = useRuntimeConfig();
+    const baseUrl = config.public.apiBase;
 
     const res = await $fetch(`${baseUrl}/multipole-plot`);
     multipoleData.value = {
@@ -132,8 +123,8 @@ async function fetchMultipoleData() {
 async function fetchCmbData() {
   try {
     loading.value = true;
-    const baseUrl =
-      process.env.NODE_ENV === "development" ? "http://127.0.0.1:8000" : "";
+    const config = useRuntimeConfig();
+    const baseUrl = config.public.apiBase;
     const res = await $fetch(
       `${baseUrl}/cmb-spectrum?dark_matter_values=${dmValues.value}`
     );

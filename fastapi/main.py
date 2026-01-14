@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 # Removed matplotlib imports
 import numpy as np
 # Removed io import
@@ -9,6 +10,20 @@ app = FastAPI(
     title="Vercel + FastAPI+CMB",
     description="Vercel + FastAPI",
     version="1.0.0",
+)
+
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://cmbfrontend.vercel.app/",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
