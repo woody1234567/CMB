@@ -7,3 +7,6 @@ dependencies = [
   "matplotlib>=3.10.8",
   "uvicorn>=0.34.0",
 ]
+
+[tool.vercel.app]
+entrypoint = "main.py"
