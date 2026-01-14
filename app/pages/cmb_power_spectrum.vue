@@ -5,16 +5,7 @@
     <div v-if="loading" class="loading">Loading data...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
 
-    <div v-else class="charts-grid">
-      <div class="chart-container">
-        <h2>Multipole Moments vs Angular Scale</h2>
-        <Line
-          v-if="multipoleData"
-          :data="multipoleData"
-          :options="multipoleOptions"
-        />
-      </div>
-
+    <div v-else>
       <div>
         <h2>CMB TT Power Spectrum</h2>
         <div class="controls">
@@ -62,23 +53,9 @@ ChartJS.register(
 
 const loading = ref(true);
 const error = ref("");
-const multipoleData = ref(null);
+
 const cmbData = ref(null);
 const dmValues = ref("0.10,0.12,0.15");
-
-const multipoleOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  scales: {
-    x: {
-      type: "logarithmic",
-      title: { display: true, text: "Multipole Moment (ℓ)" },
-    },
-    y: {
-      title: { display: true, text: "Angular Scale (θ in degrees)" },
-    },
-  },
-};
 
 const cmbOptions = {
   responsive: true,
@@ -95,31 +72,6 @@ const cmbOptions = {
     },
   },
 };
-
-// Fetch Multipole Data
-async function fetchMultipoleData() {
-  try {
-    const config = useRuntimeConfig();
-    const baseUrl = config.public.apiBase;
-
-    const res = await $fetch(`${baseUrl}/multipole-plot`);
-    multipoleData.value = {
-      datasets: [
-        {
-          label: "Multipole Moments",
-          data: res.ell_values.map((ell, i) => ({
-            x: ell,
-            y: res.angular_scales[i],
-          })),
-          backgroundColor: "red",
-        },
-      ],
-    };
-  } catch (e) {
-    console.error(e);
-    error.value = "Failed to load multipole data";
-  }
-}
 
 // Fetch CMB Spectrum Data
 async function fetchCmbData() {
@@ -159,7 +111,7 @@ function getRandomColor() {
 }
 
 onMounted(async () => {
-  await Promise.all([fetchMultipoleData(), fetchCmbData()]);
+  await fetchCmbData();
 });
 </script>
 
@@ -174,18 +126,6 @@ onMounted(async () => {
 h1 {
   text-align: center;
   margin-bottom: 2rem;
-}
-
-.charts-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-}
-
-@media (min-width: 768px) {
-  .charts-grid {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 
 .chart-container {

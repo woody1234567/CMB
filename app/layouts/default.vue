@@ -30,12 +30,20 @@
             Home
           </UButton>
           <UButton
-            to="/cmb-chart"
+            to="/multipole_moments"
             variant="ghost"
             color="gray"
             active-class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
           >
-            CMB Chart
+            Multipole Moments
+          </UButton>
+          <UButton
+            to="/cmb_power_spectrum"
+            variant="ghost"
+            color="gray"
+            active-class="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+          >
+            CMB Power Spectrum
           </UButton>
         </nav>
 
