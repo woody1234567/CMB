@@ -50,7 +50,9 @@ By comparing the **observed first peak amplitude** to theoretical models with di
 - The **Planck 2018 results** measure the first peak’s amplitude and position precisely.
 - These observations suggest **Ωm ≈ 0.315**, consistent with a universe composed of **~30% total matter (dark + baryonic) and ~70% dark energy**.
 
-### **The Second Peak of the CMB **
+---
+
+### **The Second Peak of the CMB**
 
 The **second acoustic peak** in the **CMB power spectrum** provides critical information about the **baryonic matter content (Ωb)** of the universe. Here’s why:
 
@@ -103,6 +105,8 @@ Thus, the **relative height of the first and second peaks** gives us a direct me
 - **Second Peak** → Determines **baryonic matter (Ωb)**
 - More **Ωb** → **Lower second peak**
 - Less **Ωb** → **Higher second peak**
+
+---
 
 ### **The Third Peak of the CMB**
 

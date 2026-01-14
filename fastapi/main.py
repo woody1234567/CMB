@@ -94,7 +94,7 @@ def get_cmb_spectrum(omch2: float):
     )
 
     pars.set_for_lmax(
-        lmax=2500,
+        lmax=1000,
         lens_potential_accuracy=0
     )
 

@@ -64,8 +64,8 @@ const cmbOptions = {
   scales: {
     x: {
       type: "logarithmic",
-      min: 2,
-      max: 2500,
+      min: 15,
+      max: 1000,
       title: { display: true, text: "Multipole Moment (ℓ)" },
     },
     y: {
