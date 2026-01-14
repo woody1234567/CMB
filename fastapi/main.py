@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, StreamingResponse
+# Removed matplotlib imports
 import numpy as np
-import io
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
+# Removed io import
 
 
 app = FastAPI(
@@ -31,7 +29,7 @@ def get_sample_data():
 def get_item(item_id: int):
     return {
         "item": {
-            "id": item_id,
+            "item_id": item_id,
             "name": "Sample Item " + str(item_id),
             "value": item_id * 100
         },
@@ -41,65 +39,25 @@ def get_item(item_id: int):
 @app.get("/multipole-plot")
 def multipole_plot():
     # Data
-    ell_values = np.array([2, 10, 100, 200, 1000, 2000])
-    angular_scales = 180 / ell_values  # degrees
+    ell_values = [2, 10, 100, 200, 1000, 2000]
+    angular_scales = (180 / np.array(ell_values)).tolist()  # degrees
 
-    # Create figure
-    fig, ax = plt.subplots(figsize=(8, 5))
-    ax.scatter(
-        ell_values,
-        angular_scales,
-        color="red",
-        s=100,
-        label="Multipole Moments"
-    )
-    ax.plot(
-        ell_values,
-        angular_scales,
-        linestyle="--",
-        color="gray",
-        alpha=0.6
-    )
+    return {
+        "ell_values": ell_values,
+        "angular_scales": angular_scales
+    }
 
-    # Annotate points
-    for ell, scale in zip(ell_values, angular_scales):
-        ax.text(
-            ell,
-            scale + 0.3,
-            f"ℓ={ell}\nθ≈{scale:.2f}°",
-            ha="center",
-            fontsize=10
-        )
-
-    # Labels and styling
-    ax.set_xscale("log")
-    ax.set_xlabel("Multipole Moment (ℓ)")
-    ax.set_ylabel("Angular Scale (θ in degrees)")
-    ax.set_title("Multipole Moments and Corresponding Angular Scales")
-    ax.grid(True, which="both", linestyle="--", alpha=0.5)
-    ax.legend()
-
-    # Export image to memory buffer
-    buf = io.BytesIO()
-    plt.tight_layout()
-    plt.savefig(buf, format="png")
-    plt.close(fig)
-    buf.seek(0)
-
-    return StreamingResponse(buf, media_type="image/png")
-
-import matplotlib
-matplotlib.use("Agg")  # 必須：server / uv / container 環境
 
 from fastapi import FastAPI, Query, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse
 import camb
 import numpy as np
-import matplotlib.pyplot as plt
-import io
+# Removed matplotlib.pyplot as plt
+# Removed io
 
-app = FastAPI(title="CMB Power Spectrum API")
-
+# app is already defined above, but typically one file has one app.
+# The previous code had two `app = FastAPI(...)` which is wrong, but we'll stick to refining the endpoints.
+# Assuming we are keeping the first `app` definition.
 
 def get_cmb_spectrum(omch2: float):
     """
@@ -155,33 +113,20 @@ def cmb_spectrum(
     if len(omch2_list) == 0:
         raise HTTPException(status_code=400, detail="No dark matter values provided.")
 
-    # Plot
-    fig, ax = plt.subplots(figsize=(8, 6))
+    data = []
 
     for omch2 in omch2_list:
         ell, TT = get_cmb_spectrum(omch2)
-        ax.plot(
-            ell,
-            TT,
-            label=f"Ωc h² = {omch2:.3f}"
-        )
+        # Downsample or limit range if needed for JSON size, but for now send all
+        # Filtering l < 2 if needed as in plot usually log starts at 2
+        mask = ell >= 2
+        data.append({
+            "omch2": omch2,
+            "ell": ell[mask].tolist(),
+            "tt": TT[mask].tolist()
+        })
 
-    ax.set_xscale("log")
-    ax.set_xlim(2, 2500)
-    ax.set_xlabel(r"$\ell$")
-    ax.set_ylabel(r"$\Delta T\ (\mu K)$")
-    ax.set_title("CMB TT Power Spectrum for Different Dark Matter Densities")
-    ax.grid(True, which="both", linestyle="--", alpha=0.6)
-    ax.legend()
-
-    # Export image to memory buffer
-    buf = io.BytesIO()
-    plt.tight_layout()
-    plt.savefig(buf, format="png")
-    plt.close(fig)
-    buf.seek(0)
-
-    return StreamingResponse(buf, media_type="image/png")
+    return JSONResponse(content={"datasets": data})
 
 
 @app.get("/", response_class=HTMLResponse)
