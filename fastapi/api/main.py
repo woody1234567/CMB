@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, StreamingResponse
-# import numpy as np
-# import io
-# import matplotlib
-# matplotlib.use('Agg')
-# import matplotlib.pyplot as plt
+import numpy as np
+import io
+import matplotlib
+matplotlib.use('Agg')
 
 
 app = FastAPI(
