@@ -13,6 +13,7 @@
         :options="multipoleOptions"
       />
     </div>
+    <ContentRenderer v-if="multipoleMoments" :value="multipoleMoments" />
   </div>
 </template>
 
@@ -89,6 +90,11 @@ async function fetchMultipoleData() {
 onMounted(async () => {
   await fetchMultipoleData();
 });
+
+// Fetch multipole moments content Data
+const { data: multipoleMoments } = await useAsyncData(() =>
+  queryCollection("content").path("/multipole_moments").first()
+);
 </script>
 
 <style scoped>

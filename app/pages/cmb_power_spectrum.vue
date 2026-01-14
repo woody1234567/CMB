@@ -23,6 +23,7 @@
         </div>
       </div>
     </div>
+    <ContentRenderer v-if="cmbPowerSpectrum" :value="cmbPowerSpectrum" />
   </div>
 </template>
 
@@ -113,6 +114,11 @@ function getRandomColor() {
 onMounted(async () => {
   await fetchCmbData();
 });
+
+// Fetch CMB Power Spectrum content Data
+const { data: cmbPowerSpectrum } = await useAsyncData(() =>
+  queryCollection("content").path("/cmb_power_spectrum").first()
+);
 </script>
 
 <style scoped>
