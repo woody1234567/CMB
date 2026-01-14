@@ -88,6 +88,102 @@ def multipole_plot():
 
     return StreamingResponse(buf, media_type="image/png")
 
+import matplotlib
+matplotlib.use("Agg")  # 必須：server / uv / container 環境
+
+from fastapi import FastAPI, Query, HTTPException
+from fastapi.responses import StreamingResponse
+import camb
+import numpy as np
+import matplotlib.pyplot as plt
+import io
+
+app = FastAPI(title="CMB Power Spectrum API")
+
+
+def get_cmb_spectrum(omch2: float):
+    """
+    Compute TT power spectrum using CAMB for a given dark matter density.
+    """
+    pars = camb.CAMBparams()
+
+    # Planck 2018 best-fit cosmology
+    pars.set_cosmology(
+        H0=67.36,
+        ombh2=0.02237,
+        omch2=omch2,
+        tau=0.0544
+    )
+
+    pars.InitPower.set_params(
+        ns=0.9649,
+        As=2.1e-9
+    )
+
+    pars.set_for_lmax(
+        lmax=2500,
+        lens_potential_accuracy=0
+    )
+
+    results = camb.get_results(pars)
+    powers = results.get_cmb_power_spectra(
+        pars,
+        CMB_unit="muK"
+    )
+
+    ell = np.arange(powers["total"].shape[0])
+    TT = powers["total"][:, 0]
+
+    return ell, TT
+
+
+@app.get("/cmb-spectrum")
+def cmb_spectrum(
+    dark_matter_values: str = Query(
+        ...,
+        description="Comma-separated dark matter density values (e.g. 0.10,0.12,0.15)"
+    )
+):
+    try:
+        omch2_list = [float(v) for v in dark_matter_values.split(",")]
+    except ValueError:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid dark_matter_values format. Use comma-separated floats."
+        )
+
+    if len(omch2_list) == 0:
+        raise HTTPException(status_code=400, detail="No dark matter values provided.")
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    for omch2 in omch2_list:
+        ell, TT = get_cmb_spectrum(omch2)
+        ax.plot(
+            ell,
+            TT,
+            label=f"Ωc h² = {omch2:.3f}"
+        )
+
+    ax.set_xscale("log")
+    ax.set_xlim(2, 2500)
+    ax.set_xlabel(r"$\ell$")
+    ax.set_ylabel(r"$\Delta T\ (\mu K)$")
+    ax.set_title("CMB TT Power Spectrum for Different Dark Matter Densities")
+    ax.grid(True, which="both", linestyle="--", alpha=0.6)
+    ax.legend()
+
+    # Export image to memory buffer
+    buf = io.BytesIO()
+    plt.tight_layout()
+    plt.savefig(buf, format="png")
+    plt.close(fig)
+    buf.seek(0)
+
+    return StreamingResponse(buf, media_type="image/png")
+
+
 @app.get("/", response_class=HTMLResponse)
 def read_root():
     return """
