@@ -95,13 +95,22 @@
             Home
           </UButton>
           <UButton
-            to="/cmb-chart"
+            to="/multipole_moments"
             block
             variant="ghost"
             color="gray"
             @click="isMenuOpen = false"
           >
-            CMB Chart
+            Multipole moments
+          </UButton>
+          <UButton
+            to="/cmb_power_spectrum"
+            block
+            variant="ghost"
+            color="gray"
+            @click="isMenuOpen = false"
+          >
+            CMB Power Spectrum
           </UButton>
         </div>
       </div>
