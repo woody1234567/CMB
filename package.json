@@ -28,5 +28,13 @@
     "@iconify-json/heroicons": "^1.2.3",
     "@iconify-json/lucide": "^1.2.85",
     "@iconify-json/simple-icons": "^1.2.66"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "@parcel/watcher",
+      "esbuild",
+      "vue-demi"
+    ]
   }
 }
