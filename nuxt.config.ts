@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       apiBase:
         process.env.NODE_ENV === "development"
           ? "http://127.0.0.1:8000"
-          : "https://cmb-three.vercel.app/",
+          : "https://cmb-three.vercel.app",
     },
   },
 });

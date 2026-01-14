@@ -8,14 +8,14 @@
     <div v-else class="charts-grid">
       <div class="chart-container">
         <h2>Multipole Moments vs Angular Scale</h2>
-        <Scatter
+        <Line
           v-if="multipoleData"
           :data="multipoleData"
           :options="multipoleOptions"
         />
       </div>
 
-      <div class="chart-container">
+      <div>
         <h2>CMB TT Power Spectrum</h2>
         <div class="controls">
           <label>Dark Matter Density (Ωc h²):</label>
@@ -27,7 +27,9 @@
           />
           <button @click="fetchCmbData">Update</button>
         </div>
-        <Line v-if="cmbData" :data="cmbData" :options="cmbOptions" />
+        <div class="chart-container">
+          <Line v-if="cmbData" :data="cmbData" :options="cmbOptions" />
+        </div>
       </div>
     </div>
   </div>
