@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   modules: ["@nuxt/eslint", "@nuxt/icon", "@nuxt/ui", "@nuxt/content"],
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/css/main.css", "katex/dist/katex.min.css"],
   runtimeConfig: {
     public: {
       apiBase:

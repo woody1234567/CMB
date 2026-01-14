@@ -121,7 +121,7 @@
           class="flex flex-col md:flex-row justify-between items-center gap-4"
         >
           <div class="text-sm text-gray-500 dark:text-gray-400">
-            &copy; {{ new Date().getFullYear() }} CMB Darkmatter. All rights
+            &copy; {{ new Date().getFullYear() }} Chun-Wei, Hsu. All rights
             reserved.
           </div>
           <div class="flex items-center gap-4">
