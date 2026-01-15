@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <ContentRenderer v-if="cmbPowerSpectrum" :value="cmbPowerSpectrum" />
+    <UBlogPosts v-if="posts" :posts="posts" />
   </div>
 </template>
 
@@ -39,7 +39,7 @@ import {
   Legend,
   LogarithmicScale,
 } from "chart.js";
-import { Scatter, Line } from "vue-chartjs";
+import { Line } from "vue-chartjs";
 
 ChartJS.register(
   CategoryScale,
@@ -115,9 +115,9 @@ onMounted(async () => {
   await fetchCmbData();
 });
 
-// Fetch CMB Power Spectrum content Data
-const { data: cmbPowerSpectrum } = await useAsyncData(() =>
-  queryCollection("content").path("/cmb_power_spectrum").first()
+// Fetch Blog Posts from 'posts' collection
+const { data: posts } = await useAsyncData(() =>
+  queryCollection("posts").order("path", "ASC").all()
 );
 </script>
 
@@ -140,6 +140,7 @@ h1 {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   height: 400px;
+  margin-bottom: 2rem;
 }
 
 .controls {
