@@ -23,7 +23,27 @@
         </div>
       </div>
     </div>
-    <UBlogPosts v-if="posts" :posts="posts" />
+    <UBlogPosts v-if="posts">
+      <UBlogPost
+        v-for="(post, index) in posts"
+        :key="index"
+        :title="post.title"
+        :description="post.description"
+        :date="post.date"
+        :image="post.image"
+        class="group"
+      >
+        <template #footer>
+          <UButton
+            label="Read More"
+            color="primary"
+            variant="ghost"
+            :to="post.path"
+            trailing-icon="i-heroicons-arrow-right-20-solid"
+          />
+        </template>
+      </UBlogPost>
+    </UBlogPosts>
   </div>
 </template>
 
