@@ -130,7 +130,7 @@
           class="flex flex-col md:flex-row justify-between items-center gap-4"
         >
           <div class="text-sm text-gray-500 dark:text-gray-400">
-            &copy; {{ new Date().getFullYear() }} Chun-Wei, Hsu. All rights
+            &copy; {{ new Date().getFullYear() }} StudyWithWoody. All rights
             reserved.
           </div>
           <div class="flex items-center gap-4">
@@ -138,7 +138,7 @@
               icon="i-simple-icons-github"
               color="gray"
               variant="ghost"
-              to="https://github.com"
+              to="https://github.com/woody1234567"
               target="_blank"
               aria-label="GitHub"
             />
@@ -168,7 +168,7 @@ watch(
   () => route.path,
   () => {
     isMenuOpen.value = false;
-  }
+  },
 );
 </script>
 
